@@ -1,0 +1,19 @@
+package parkour.community_parkour;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Item;
+import org.bukkit.plugin.java.JavaPlugin;
+import parkour.community_parkour.Items.Item_Listener;
+
+public final class Main extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        Bukkit.getPluginManager().registerEvents(new Item_Listener(this), this);
+    }
+
+    @Override
+    public void onDisable() {
+        // Plugin shutdown logic
+    }
+}

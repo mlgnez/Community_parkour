@@ -1,0 +1,7 @@
+name: Community_parkour
+version: '${project.version}'
+main: parkour.community_parkour.Main
+api-version: 1.18
+authors: [ Rubyboat1207, Jrv1000 ]
+description: stop looking at description
+website: www.google.com/support/
