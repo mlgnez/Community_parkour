@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Item;
 import org.bukkit.plugin.java.JavaPlugin;
+import parkour.community_parkour.Commands.CommandAutofill;
+import parkour.community_parkour.Commands.CommandExecutor;
 import parkour.community_parkour.Items.HidePlayers_Item;
 import parkour.community_parkour.Items.Item_Listener;
 
@@ -15,6 +17,8 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new Item_Listener(this), this);
         HidePlayers_Item.init();
+        getCommand("editparkour").setExecutor(new CommandExecutor());
+        getCommand("editparkour").setTabCompleter(new CommandAutofill());
     }
 
     @Override

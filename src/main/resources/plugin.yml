@@ -5,3 +5,13 @@ api-version: 1.18
 authors: [ Rubyboat1207, Jrv1000 ]
 description: stop looking at description
 website: www.google.com/support/
+
+commands:
+  editparkour:
+    description: Lets you Make a Course!
+    aliases:
+      - ep
+      - makeparkour
+      - newparkour
+      - newmap
+      - editmap
