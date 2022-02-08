@@ -1,5 +1,9 @@
 package parkour.community_parkour.Commands;
 
+import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.session.SessionManager;
+import com.sk89q.worldedit.world.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -35,7 +39,12 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                 }
                 if(args[0].equalsIgnoreCase("publish"))
                 {
-                    
+                    Main.instance.SavePlot(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), player);
+                    Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.LoadPlot(player), (World) Bukkit.getWorld("world"));
+                }
+                if(args[0].equalsIgnoreCase("setPlotId") && player.isOp())
+                {
+                    player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, Integer.parseInt(args[1]));
                 }
             }
         }

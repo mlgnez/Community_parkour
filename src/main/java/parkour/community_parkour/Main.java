@@ -11,6 +11,7 @@ import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -34,6 +35,8 @@ public final class Main extends JavaPlugin {
 
     public NamespacedKey hidden = new NamespacedKey(this, "players_hidden");
     public NamespacedKey PlotID = new NamespacedKey(this, "plot_id");
+
+    public int PlotCount = 0;
 
     public Boolean plotAvaliability[] = {
             false,
@@ -114,6 +117,20 @@ public final class Main extends JavaPlugin {
 
         return clipboard;
 
+    }
+
+    public void PastePlot(int plot_id, Clipboard clipboard, World world)
+    {
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+            Operation operation = new ClipboardHolder(clipboard)
+                    .createPaste(editSession)
+                    .to(BlockVector3.at(0, 131, plot_id * 25))
+                    // configure here
+                    .build();
+            Operations.complete(operation);
+        } catch (WorldEditException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
