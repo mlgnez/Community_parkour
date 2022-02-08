@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Boost_Item {
+public class HiddenPlayers_Item {
 
     public static ItemStack supply;
 
@@ -17,11 +17,11 @@ public class Boost_Item {
 
     private static void createItem(){
 
-        ItemStack item = new ItemStack(Material.FEATHER, 1);
+        ItemStack item = new ItemStack(Material.GRAY_DYE, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("§dHide Other Players");
+        meta.setDisplayName("§dShow Other Players");
         List<String> lore = new ArrayList<>();
-        lore.add("Use this item to hide other players to focus on parkour.");
+        lore.add("Use this item to show other players to see their progress.");
         meta.setLore(lore);
         meta.addEnchant(Enchantment.LUCK, 1, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

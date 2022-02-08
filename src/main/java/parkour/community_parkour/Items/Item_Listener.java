@@ -1,6 +1,8 @@
 package parkour.community_parkour.Items;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,50 +22,69 @@ public class Item_Listener implements Listener {
     @EventHandler
     public void onUse (PlayerInteractEvent e){
 
-        if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
-
+        if(e.getAction() == Action.RIGHT_CLICK_AIR){
             Player player = e.getPlayer();
-
             if(e.getHand() == EquipmentSlot.HAND){
 
-                if(player.getItemInUse() != null){
+                if(player.getInventory().getItemInMainHand().getType() == Material.LIME_DYE){
 
-                    if(player.getItemInHand().getItemMeta().equals(HidePlayers_Item.supply.getItemMeta())){
-                        if(player.getPersistentDataContainer().get(main.hidden, PersistentDataType.INTEGER) != null){
-                            if(player.getPersistentDataContainer().get(main.hidden,PersistentDataType.INTEGER) == 0){
 
-                                Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
+                    Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
+                    for (Player value : players) {
+                        player.hidePlayer(main, value);
+                    }
+                    player.getInventory().setItemInMainHand(HiddenPlayers_Item.supply);
+                    return;
 
-                                for(int i = 0; i < players.length; i++){
+                }
+                if(player.getInventory().getItemInMainHand().getType() == Material.GRAY_DYE){
 
-                                    player.hidePlayer(main, players[i]);
+                    Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
+                    for (Player value : players) {
+                        player.showPlayer(main, value);
+                    }
+                    player.getInventory().setItemInMainHand(HidePlayers_Item.supply);
+                    return;
 
+                }
+                if(player.getInventory().getItemInMainHand().getType() == Material.FEATHER){
+
+                    if(player.getPersistentDataContainer().get(main.boost_cooldown, PersistentDataType.INTEGER) != null){
+
+                        if(player.getPersistentDataContainer().get(main.boost_cooldown, PersistentDataType.INTEGER) == 0){
+                            player.setVelocity(player.getLocation().getDirection());
+                            player.getPersistentDataContainer().set(main.boost_cooldown, PersistentDataType.INTEGER, 1);
+                        }
+                        if(player.getPersistentDataContainer().get(main.boost_cooldown, PersistentDataType.INTEGER) == 1){
+
+                            player.getPersistentDataContainer().set(main.boost_cooldown, PersistentDataType.INTEGER, -1);
+
+                            Bukkit.getScheduler().runTaskTimer(main, new Runnable(){
+
+                                int time = 60; //or any other number you want to start countdown from
+                                boolean hasFinished = false;
+
+                                @Override
+                                public void run() {
+
+                                    if (this.time == 0)
+                                    {
+                                        if(!hasFinished){
+                                            Bukkit.broadcastMessage("Boost is ready!");
+                                            player.getPersistentDataContainer().set(main.boost_cooldown, PersistentDataType.INTEGER, 0);
+                                            hasFinished = true;
+                                            return;
+                                        }
+                                    }
+
+                                    this.time--;
                                 }
+                            }, 0L, 20L);
 
-                                player.getItemInHand().setType(Material.GRAY_DYE);
-
-                                player.getPersistentDataContainer().set(main.hidden,PersistentDataType.INTEGER, 1);
-
-                            }else if(player.getPersistentDataContainer().get(main.hidden, PersistentDataType.INTEGER) == 1){
-
-                                Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
-
-                                for(int i = 0; i < players.length; i++){
-
-                                    player.showPlayer(main, players[i]);
-
-                                }
-
-                                player.getItemInHand().setType(Material.LIME_DYE);
-
-                                player.getPersistentDataContainer().set(main.hidden,PersistentDataType.INTEGER, 0);
-
-                            }
-
-                        }else{
-                            player.getPersistentDataContainer().set(main.hidden, PersistentDataType.INTEGER, 0);
                         }
 
+                    }else{
+                        player.getPersistentDataContainer().set(main.boost_cooldown, PersistentDataType.INTEGER, 0);
                     }
 
                 }
@@ -83,8 +104,8 @@ public class Item_Listener implements Listener {
 
         if(!(player.getInventory().contains(HidePlayers_Item.supply) || player.getInventory().contains(Boost_Item.supply))){
 
-            player.getInventory().setItem(1, Boost_Item.supply);
-            player.getInventory().setItem(2, HidePlayers_Item.supply);
+            player.getInventory().setItem(7, Boost_Item.supply);
+            player.getInventory().setItem(8, HidePlayers_Item.supply);
 
         }
 
