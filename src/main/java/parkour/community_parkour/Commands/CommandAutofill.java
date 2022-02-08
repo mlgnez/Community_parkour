@@ -11,7 +11,7 @@ public class CommandAutofill implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         ArrayList<String> AutoFillData = new ArrayList<>();
-        if(command.getName().equalsIgnoreCase("editparkour"))
+        if(command.getName().equalsIgnoreCase("parkour"))
         {
             if(args.length == 1)
             {

@@ -12,14 +12,51 @@ import parkour.community_parkour.Items.Item_Listener;
 public final class Main extends JavaPlugin {
 
     public NamespacedKey hidden = new NamespacedKey(this, "players_hidden");
+    public NamespacedKey PlotID = new NamespacedKey(this, "plot_id");
+
+    public Boolean plotAvaliability[] = {
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+    };
 
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new Item_Listener(this), this);
         HidePlayers_Item.init();
-        getCommand("editparkour").setExecutor(new CommandExecutor());
-        getCommand("editparkour").setTabCompleter(new CommandAutofill());
+        instance = this;
+        getCommand("parkour").setExecutor(new CommandExecutor());
+        getCommand("parkour").setTabCompleter(new CommandAutofill());
     }
+
+    public static Main instance;
 
     @Override
     public void onDisable() {

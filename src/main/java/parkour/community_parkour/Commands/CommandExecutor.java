@@ -5,6 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
+import parkour.community_parkour.Main;
 
 public class CommandExecutor implements org.bukkit.command.CommandExecutor {
     @Override
@@ -12,11 +14,28 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
         if(sender instanceof Player)
         {
             Player player = (Player) sender;
-            if(cmd.getName().equalsIgnoreCase("editparkour"))
+            if(cmd.getName().equalsIgnoreCase("parkour"))
             {
-                if(args[0].equalsIgnoreCase("new"))
+                if(args[0].equalsIgnoreCase("edit"))
                 {
-                    player.teleport(new Location(Bukkit.getWorld("world"), 0,84,-25));
+                    int plot_id = -25;
+                    if(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER) == null)
+                    {
+                        for(int i = 0; i < Main.instance.plotAvaliability.length; i++ )
+                        {
+                            if(!Main.instance.plotAvaliability[i])
+                            {
+                                plot_id = i;
+                                player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, plot_id);
+                                break;
+                            }
+                        }
+                    }
+                    player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 84, (plot_id * 25) - 24.5f));
+                }
+                if(args[0].equalsIgnoreCase("publish"))
+                {
+
                 }
             }
         }

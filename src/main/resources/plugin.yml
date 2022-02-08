@@ -7,11 +7,5 @@ description: stop looking at description
 website: www.google.com/support/
 
 commands:
-  editparkour:
+  parkour:
     description: Lets you Make a Course!
-    aliases:
-      - ep
-      - makeparkour
-      - newparkour
-      - newmap
-      - editmap
