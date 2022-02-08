@@ -35,7 +35,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                 }
                 if(args[0].equalsIgnoreCase("publish"))
                 {
-
+                    
                 }
             }
         }
