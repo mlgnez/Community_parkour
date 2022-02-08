@@ -16,8 +16,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
             {
                 if(args[0].equalsIgnoreCase("new"))
                 {
-                    player.teleport(new Location(Bukkit.getWorld("world"), 0,0,0));
-
+                    player.teleport(new Location(Bukkit.getWorld("world"), 0,84,-25));
                 }
             }
         }
