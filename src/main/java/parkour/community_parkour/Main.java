@@ -3,6 +3,7 @@ package parkour.community_parkour;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.*;
@@ -19,6 +20,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import parkour.community_parkour.Builder_Mode.BuilderInvItem;
+import parkour.community_parkour.Builder_Mode.BuilderListener;
 import parkour.community_parkour.Commands.CommandAutofill;
 import parkour.community_parkour.Commands.CommandExecutor;
 import parkour.community_parkour.Items.Boost_Item;
@@ -35,6 +38,8 @@ public final class Main extends JavaPlugin {
 
     public NamespacedKey hidden = new NamespacedKey(this, "players_hidden");
     public NamespacedKey PlotID = new NamespacedKey(this, "plot_id");
+    public NamespacedKey Building = new NamespacedKey(this, "building");
+
 
     public int PlotCount = 0;
 
@@ -80,7 +85,7 @@ public final class Main extends JavaPlugin {
         BlockVector3 vector2 = BlockVector3.at(-15,199,z2);
 
         CuboidRegion cube = new CuboidRegion(vector1, vector2);
-        cube.setWorld((World) Bukkit.getWorld("world"));
+        cube.setWorld(BukkitAdapter.adapt(Bukkit.getWorld("world")));
 
         BlockArrayClipboard clipboard = new BlockArrayClipboard(cube);
 
@@ -102,7 +107,7 @@ public final class Main extends JavaPlugin {
 
     }
 
-    public Clipboard LoadPlot(Player player){
+    public Clipboard GetPlayerSchematic(Player player){
 
         File file = new File("./schematics/" + player.getUniqueId());
 
@@ -136,12 +141,15 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new Item_Listener(this), this);
+        Bukkit.getPluginManager().registerEvents(new BuilderListener(this), this);
         HidePlayers_Item.init();
         HiddenPlayers_Item.init();
         Boost_Item.init();
+        BuilderInvItem.init();
         instance = this;
         getCommand("parkour").setExecutor(new CommandExecutor());
         getCommand("parkour").setTabCompleter(new CommandAutofill());
+
     }
 
     public static Main instance;

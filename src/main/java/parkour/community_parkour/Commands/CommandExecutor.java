@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.persistence.PersistentDataType;
 import parkour.community_parkour.Main;
 
@@ -36,11 +37,33 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                         }
                     }
                     player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 84, (plot_id * 25) - 24.5f));
+
+                    if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) != null){
+
+                        if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 1){//makes player not a builder
+
+                            PermissionAttachment attachment = player.addAttachment(Main.instance);
+                            attachment.setPermission("builder", false);
+                            player.setAllowFlight(false);
+
+                        }
+                        if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 0){//makes player a builder
+
+                            PermissionAttachment attachment = player.addAttachment(Main.instance);
+                            attachment.setPermission("builder", true);
+                            player.setAllowFlight(true);
+
+                        }
+
+                    }else{
+                        player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 1);
+                    }
                 }
                 if(args[0].equalsIgnoreCase("publish"))
                 {
+
                     Main.instance.SavePlot(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), player);
-                    Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.LoadPlot(player), (World) Bukkit.getWorld("world"));
+                    Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.GetPlayerSchematic(player), (World) Bukkit.getWorld("world"));
                 }
                 if(args[0].equalsIgnoreCase("setPlotId") && player.isOp())
                 {
