@@ -2,6 +2,7 @@ package parkour.community_parkour.Commands;
 
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.session.SessionManager;
 import com.sk89q.worldedit.world.World;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.persistence.PersistentDataType;
+import parkour.community_parkour.Builder_Mode.BuilderInvItem;
 import parkour.community_parkour.Main;
 
 public class CommandExecutor implements org.bukkit.command.CommandExecutor {
@@ -24,46 +26,41 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                 if(args[0].equalsIgnoreCase("edit"))
                 {
                     int plot_id = -25;
-                    if(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER) == null)
+                    for(int i = 0; i < Main.instance.plotAvaliability.length; i++ )
                     {
-                        for(int i = 0; i < Main.instance.plotAvaliability.length; i++ )
+                        if(!Main.instance.plotAvaliability[i])
                         {
-                            if(!Main.instance.plotAvaliability[i])
-                            {
-                                plot_id = i;
-                                player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, plot_id);
-                                break;
-                            }
+                            plot_id = i;
+                            player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, plot_id);
+                            player.sendMessage("[DEBUG] Your Plot Id is: " + plot_id);
+                            break;
                         }
                     }
                     player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 84, (plot_id * 25) - 24.5f));
 
                     if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) != null){
 
-                        if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 1){//makes player not a builder
 
-                            PermissionAttachment attachment = player.addAttachment(Main.instance);
-                            attachment.setPermission("builder", false);
-                            player.setAllowFlight(false);
-
-                        }
-                        if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 0){//makes player a builder
-
-                            PermissionAttachment attachment = player.addAttachment(Main.instance);
-                            attachment.setPermission("builder", true);
-                            player.setAllowFlight(true);
-
-                        }
+                        PermissionAttachment attachment = player.addAttachment(Main.instance);
+                        attachment.setPermission("builder", true);
+                        player.setAllowFlight(true);
+                        player.getInventory().setItem(6, BuilderInvItem.supply);
 
                     }else{
-                        player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 1);
+                        player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
                     }
                 }
                 if(args[0].equalsIgnoreCase("publish"))
                 {
 
+                    PermissionAttachment attachment = player.addAttachment(Main.instance);
+                    attachment.setPermission("builder", false);
+                    player.setAllowFlight(false);
+
+
+
                     Main.instance.SavePlot(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), player);
-                    Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.GetPlayerSchematic(player), (World) Bukkit.getWorld("world"));
+                    Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
                 }
                 if(args[0].equalsIgnoreCase("setPlotId") && player.isOp())
                 {

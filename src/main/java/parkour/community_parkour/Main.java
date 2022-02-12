@@ -98,7 +98,7 @@ public final class Main extends JavaPlugin {
             e.printStackTrace();
         }
 
-        File file = new File("./schematics/" + player.getUniqueId());
+        File file = new File("./schematics/" + player.getUniqueId() + ".schem");
         try(ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(file))){
             writer.write(clipboard);
         } catch (IOException exception) {
@@ -109,7 +109,7 @@ public final class Main extends JavaPlugin {
 
     public Clipboard GetPlayerSchematic(Player player){
 
-        File file = new File("./schematics/" + player.getUniqueId());
+        File file = new File("./schematics/" + player.getUniqueId() + ".schem");
 
         Clipboard clipboard = null;
 

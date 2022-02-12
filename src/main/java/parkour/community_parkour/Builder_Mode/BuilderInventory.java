@@ -23,6 +23,8 @@ public class BuilderInventory implements InventoryHolder {
     ItemStack ladder;
     ItemStack vine;
     ItemStack leaves;
+    ItemStack wall;
+    ItemStack fence;
 
     public BuilderInventory(){
         inv = Bukkit.createInventory(this, 45, "Building Inventory");
@@ -42,14 +44,36 @@ public class BuilderInventory implements InventoryHolder {
         ladder = createItem("Ladder", Material.LADDER, lore);
         vine = createItem("Vines", Material.VINE, lore);
         leaves = createItem("Leaves", Material.SPRUCE_LEAVES, lore);
+        wall = createItem("Cobblestone Wall", Material.COBBLESTONE_WALL, lore);
+        fence = createItem("Spruce Fence", Material.SPRUCE_FENCE, lore);
 
-        for(int i = 0; i < 9; i++){
+        for(int i = 0; i < 10; i++){
 
             inv.setItem(i, blackglass);
 
         }
 
-        for (int i = 35; i < 44; i++){
+        inv.setItem(17, blackglass);
+        inv.setItem(26, blackglass);
+        inv.setItem(35, blackglass);
+
+        inv.setItem(18, blackglass);
+        inv.setItem(27, blackglass);
+        inv.setItem(36, blackglass);
+
+        inv.setItem(10, stonebrick);
+        inv.setItem(11, spruceslab);
+        inv.setItem(12, spruceplank);
+        inv.setItem(13, slimeblock);
+        inv.setItem(14, stone);
+        inv.setItem(15, andesite);
+        inv.setItem(16, ladder);
+        inv.setItem(19, vine);
+        inv.setItem(20, leaves);
+        inv.setItem(21, wall);
+        inv.setItem(22, fence);
+
+        for (int i = 35; i < 45; i++){
 
             inv.setItem(i, blackglass);
 

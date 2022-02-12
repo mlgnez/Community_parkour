@@ -19,9 +19,9 @@ public class Boost_Item {
 
         ItemStack item = new ItemStack(Material.FEATHER, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("§dHide Other Players");
+        meta.setDisplayName("§dBoost");
         List<String> lore = new ArrayList<>();
-        lore.add("Use this item to hide other players to focus on parkour.");
+        lore.add("Use this item to boost and get ahead.");
         meta.setLore(lore);
         meta.addEnchant(Enchantment.LUCK, 1, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
