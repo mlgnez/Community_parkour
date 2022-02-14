@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import parkour.community_parkour.Main;
 
 public class BuilderListener implements Listener {
@@ -33,13 +34,13 @@ public class BuilderListener implements Listener {
 
             }
 
-            if(!e.getPlayer().hasPermission("builder")){
+            if(e.getPlayer().getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 0){
 
                 e.setCancelled(true);
 
             }
 
-            if(e.getPlayer().hasPermission("builder")){
+            if(e.getPlayer().getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 1){
 
                 e.getBlock().setType(Material.AIR);
 
@@ -98,7 +99,13 @@ public class BuilderListener implements Listener {
 
         if(e.getHand() == EquipmentSlot.HAND){
 
-            if(e.getPlayer().hasPermission("builder")){
+            if(e.getPlayer().getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == null){
+
+                return;
+
+            }
+
+            if(e.getPlayer().getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 1){
 
                 e.getPlayer().getInventory().addItem(new ItemStack(e.getBlock().getType()));
 

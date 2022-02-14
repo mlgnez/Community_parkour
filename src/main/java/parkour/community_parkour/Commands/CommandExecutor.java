@@ -7,9 +7,11 @@ import com.sk89q.worldedit.session.SessionManager;
 import com.sk89q.worldedit.world.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.persistence.PersistentDataType;
 import parkour.community_parkour.Builder_Mode.BuilderInvItem;
@@ -38,29 +40,26 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                     }
                     player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 84, (plot_id * 25) - 24.5f));
 
-                    if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) != null){
+                    if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == null){
 
-
-                        PermissionAttachment attachment = player.addAttachment(Main.instance);
-                        attachment.setPermission("builder", true);
-                        player.setAllowFlight(true);
-                        player.getInventory().setItem(6, BuilderInvItem.supply);
-
-                    }else{
                         player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
+
                     }
+
+                    player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 1);
+                    player.setAllowFlight(true);
+                    player.getInventory().setItem(6, BuilderInvItem.supply);
                 }
                 if(args[0].equalsIgnoreCase("publish"))
                 {
 
-                    PermissionAttachment attachment = player.addAttachment(Main.instance);
-                    attachment.setPermission("builder", false);
                     player.setAllowFlight(false);
-
-
 
                     Main.instance.SavePlot(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), player);
                     Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
+
+                    player.getInventory().setItem(6, new ItemStack(Material.AIR));
+
                 }
                 if(args[0].equalsIgnoreCase("setPlotId") && player.isOp())
                 {
