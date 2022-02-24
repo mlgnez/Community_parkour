@@ -43,7 +43,7 @@ public final class Main extends JavaPlugin {
 
     public int PlotCount = 0;
 
-    public Boolean plotAvaliability[] = {
+    public Boolean[] plotAvaliability = {
             false,
             false,
             false,
@@ -79,8 +79,8 @@ public final class Main extends JavaPlugin {
 
     public void SavePlot(int plot_num, Player player){ //plot id for plot id | player for uuid
 
-        int z1 = (plot_num * 25) + 24;
-        int z2 = (plot_num * 25) - 24;
+        int z1 = (plot_num * 50) + 25;
+        int z2 = (plot_num * 50) - 24;
         BlockVector3 vector1 = BlockVector3.at(15,63,z1);
         BlockVector3 vector2 = BlockVector3.at(-15,199,z2);
 
@@ -129,7 +129,7 @@ public final class Main extends JavaPlugin {
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
             Operation operation = new ClipboardHolder(clipboard)
                     .createPaste(editSession)
-                    .to(BlockVector3.at(0, 131, plot_id * 25))
+                    .to(BlockVector3.at(100, 131, plot_id * 50)) //we paste the plot in the line which is 100 blocks away from the building area.
                     // configure here
                     .build();
             Operations.complete(operation);

@@ -12,6 +12,8 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -31,6 +33,15 @@ public class BuilderListener implements Listener {
 
                 e.getPlayer().sendMessage(ChatColor.RED + "You cannot break the walls.");
                 e.setCancelled(true);
+                return;
+
+            }
+
+            if(e.getBlock().getType() == Material.BARRIER){
+
+                e.getPlayer().sendMessage(ChatColor.RED + "You cannot break the walls.");
+                e.setCancelled(true);
+                return;
 
             }
 
@@ -112,6 +123,26 @@ public class BuilderListener implements Listener {
             }
 
         }
+
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent e){
+
+        if(e.getPlayer().getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 1){
+
+            e.getPlayer().getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
+
+        }
+
+    }
+
+    @EventHandler
+    public void onJin(PlayerJoinEvent e){
+
+        e.getPlayer().getPersistentDataContainer().set(main.boost_cooldown, PersistentDataType.INTEGER, 0);
+
+        e.getPlayer().sendMessage(ChatColor.GOLD + "Welcome to Parkour! On this server, the community builds the parkour courses. If you want to create parkour courses, do /parkour edit. If you want to play parkour courses, so /parkour play. If you start building, and you are done, do /parkour publish.");
 
     }
 
