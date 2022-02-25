@@ -1,7 +1,12 @@
 package parkour.community_parkour.Builder_Mode;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -13,6 +18,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -132,6 +138,7 @@ public class BuilderListener implements Listener {
         if(e.getPlayer().getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 1){
 
             e.getPlayer().getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
+            e.getPlayer().getPersistentDataContainer().set(Main.instance.PlayTesting, PersistentDataType.INTEGER, 0);
 
         }
 
@@ -140,9 +147,28 @@ public class BuilderListener implements Listener {
     @EventHandler
     public void onJin(PlayerJoinEvent e){
 
+        e.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 0, 100 , 0));
         e.getPlayer().getPersistentDataContainer().set(main.boost_cooldown, PersistentDataType.INTEGER, 0);
+        e.getPlayer().getPersistentDataContainer().set(Main.instance.PlayTesting, PersistentDataType.INTEGER, 0);
 
         e.getPlayer().sendMessage(ChatColor.GOLD + "Welcome to Parkour! On this server, the community builds the parkour courses. If you want to create parkour courses, do /parkour edit. If you want to play parkour courses, so /parkour play. If you start building, and you are done, do /parkour publish.");
+
+    }
+
+    @EventHandler
+    public void onStep(PlayerMoveEvent e){
+
+        Player player = e.getPlayer();
+
+        if(player.getPersistentDataContainer().get(Main.instance.PlayTesting, PersistentDataType.INTEGER) == 1){
+
+            if(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.DEEPSLATE){
+
+                Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
+                player.getPersistentDataContainer().set(Main.instance.PlayTesting, PersistentDataType.INTEGER, 0);
+
+            }
+        }
 
     }
 

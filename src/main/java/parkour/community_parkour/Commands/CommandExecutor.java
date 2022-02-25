@@ -74,7 +74,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                     player.setAllowFlight(false);
 
                     Main.instance.SavePlot(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), player);
-                    Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
+                    Main.instance.playTest(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), player);
 
                     Main.instance.PlotCount++;
 

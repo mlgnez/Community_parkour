@@ -14,11 +14,12 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import parkour.community_parkour.Builder_Mode.BuilderInvItem;
 import parkour.community_parkour.Builder_Mode.BuilderListener;
@@ -39,6 +40,7 @@ public final class Main extends JavaPlugin {
     public NamespacedKey hidden = new NamespacedKey(this, "players_hidden");
     public NamespacedKey PlotID = new NamespacedKey(this, "plot_id");
     public NamespacedKey Building = new NamespacedKey(this, "building");
+    public NamespacedKey PlayTesting = new NamespacedKey(this, "playtesting");
 
 
     public int PlotCount = 0;
@@ -136,6 +138,17 @@ public final class Main extends JavaPlugin {
         } catch (WorldEditException e) {
             e.printStackTrace();
         }
+    }
+
+    public void playTest(int plot_id, Player player){
+
+        player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 124, (plot_id * 50) - 23.5f));
+        player.setAllowFlight(false);
+        player.sendMessage(ChatColor.GREEN + "You are now play testing your parkour course.");
+        player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
+        player.getPersistentDataContainer().set(Main.instance.PlayTesting, PersistentDataType.INTEGER, 1);
+        player.getInventory().setItem(6, new ItemStack(Material.AIR));
+
     }
 
     @Override
