@@ -147,10 +147,10 @@ public class BuilderListener implements Listener {
 
             e.getPlayer().getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
             e.getPlayer().getPersistentDataContainer().set(Main.instance.PlayTesting, PersistentDataType.INTEGER, 0);
+            Main.instance.SavePlot(e.getPlayer().getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), e.getPlayer());
+            Main.instance.resetPlot(e.getPlayer().getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER));
 
         }
-
-        Main.instance.resetPlot(e.getPlayer().getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER));
 
     }
 

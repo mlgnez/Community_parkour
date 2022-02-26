@@ -51,6 +51,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                         if(!Main.instance.plotAvaliability[i])
                         {
                             plot_id = i;
+                            Main.instance.plotAvaliability[i] = true;
                             player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, plot_id);
                             player.sendMessage("[DEBUG] Your Plot Id is: " + plot_id);
                             Main.instance.loadPlot(plot_id, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
@@ -106,7 +107,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
 
                         if(player.getPersistentDataContainer().get(Main.instance.PlayTesting, PersistentDataType.INTEGER) != 1){
 
-                            player.teleport(new Location(Bukkit.getWorld("world"), 115.5,192,0.5)); //change y to the level of the door
+                            player.teleport(new Location(Bukkit.getWorld("world"), 115.5,192,50.5)); //change y to the level of the door
 
                         }else {
                             player.sendMessage(ChatColor.RED + "You are currently play-testing, please finish before trying to play.");
@@ -126,6 +127,19 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
 
                     }else {
                         player.sendMessage(ChatColor.RED + "Error | Player is either not admin or this has broken");
+                    }
+
+                }
+                if(args[0].equalsIgnoreCase("pause")){
+
+                    if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 1){
+
+                        Main.instance.SavePlot(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), player);
+                        player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
+                        player.teleport(new Location(Bukkit.getWorld("world"), 115.5,192,50.5)); //change y to the level of the door
+
+                    }else{
+                        player.sendMessage(ChatColor.RED + "You are not currently building");
                     }
 
                 }
