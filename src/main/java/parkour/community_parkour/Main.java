@@ -109,18 +109,40 @@ public final class Main extends JavaPlugin {
 
     }
 
-    public Clipboard GetPlayerSchematic(Player player){
+    public Clipboard GetPlayerSchematic(Player player) throws IOException {
 
         File file = new File(this.getFile().getParentFile() +"/communityParkour/" + player.getUniqueId() + ".schem");
-
         Clipboard clipboard = null;
+
+        if(!file.exists()){
+
+            if(file.createNewFile())
+            {
+                file = new File(this.getFile().getParentFile() + "/communityParkour/base.schem");
+                ClipboardFormat format = ClipboardFormats.findByFile(file);
+                try(ClipboardReader reader = format.getReader(new FileInputStream(file))){
+                    clipboard = reader.read();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+                file = new File(this.getFile().getParentFile() + "/communityParkour/" + player.getUniqueId() + ".schem");
+                try(ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(file))){
+                    writer.write(clipboard);
+
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
 
         ClipboardFormat format = ClipboardFormats.findByFile(file);
         try(ClipboardReader reader = format.getReader(new FileInputStream(file))){
-            clipboard = reader.read();
+               clipboard = reader.read();
         } catch (IOException exception) {
-            exception.printStackTrace();
+                exception.printStackTrace();
         }
+
+
 
         return clipboard;
 

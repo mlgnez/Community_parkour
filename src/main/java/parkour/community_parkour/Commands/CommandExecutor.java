@@ -13,6 +13,8 @@ import org.bukkit.persistence.PersistentDataType;
 import parkour.community_parkour.Builder_Mode.BuilderInvItem;
 import parkour.community_parkour.Main;
 
+import java.io.IOException;
+
 public class CommandExecutor implements org.bukkit.command.CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
@@ -32,7 +34,11 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                             Main.instance.plotAvaliability[i] = true;
                             player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, plot_id);
                             player.sendMessage("[DEBUG] Your Plot Id is: " + plot_id);
-                            Main.instance.loadPlot(plot_id, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
+                            try {
+                                Main.instance.loadPlot(plot_id, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             break;
                         }
                     }

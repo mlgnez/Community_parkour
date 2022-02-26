@@ -23,6 +23,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import parkour.community_parkour.Main;
 
+import java.io.IOException;
+
 public class BuilderListener implements Listener {
 
     private Main main;
@@ -157,7 +159,7 @@ public class BuilderListener implements Listener {
 
 
     @EventHandler
-    public void onStep(PlayerMoveEvent e){
+    public void onStep(PlayerMoveEvent e) throws IOException {
 
         Player player = e.getPlayer();
         if(player.getPersistentDataContainer().get(Main.instance.PlayTesting, PersistentDataType.INTEGER) == 1) {
