@@ -25,6 +25,7 @@ public class BuilderInventory implements InventoryHolder {
     ItemStack leaves;
     ItemStack wall;
     ItemStack fence;
+    ItemStack checkpoint;
 
     public BuilderInventory(){
         inv = Bukkit.createInventory(this, 45, "Building Inventory");
@@ -34,6 +35,8 @@ public class BuilderInventory implements InventoryHolder {
     public void init(){
         List<String> lore = new ArrayList<>();
         lore.add(" ");
+        List<String> lore2 = new ArrayList<>();
+        lore2.add("Checkpoints");
         blackglass = createItem(" ", Material.BLACK_STAINED_GLASS_PANE, lore);
         stonebrick = createItem("Stone Bricks", Material.STONE_BRICKS, lore);
         spruceslab = createItem("Spruce Slabs", Material.SPRUCE_SLAB, lore);
@@ -46,6 +49,7 @@ public class BuilderInventory implements InventoryHolder {
         leaves = createItem("Leaves", Material.SPRUCE_LEAVES, lore);
         wall = createItem("Cobblestone Wall", Material.COBBLESTONE_WALL, lore);
         fence = createItem("Spruce Fence", Material.SPRUCE_FENCE, lore);
+        checkpoint = createItem("Checkpoint", Material.DISPENSER, lore2);
 
         for(int i = 0; i < 10; i++){
 
@@ -72,6 +76,7 @@ public class BuilderInventory implements InventoryHolder {
         inv.setItem(20, leaves);
         inv.setItem(21, wall);
         inv.setItem(22, fence);
+        inv.setItem(23, checkpoint);
 
         for (int i = 35; i < 45; i++){
 
