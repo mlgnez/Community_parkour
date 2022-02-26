@@ -280,6 +280,7 @@ public final class Main extends JavaPlugin {
         instance = this;
         getCommand("parkour").setExecutor(new CommandExecutor());
         getCommand("parkour").setTabCompleter(new CommandAutofill());
+        Bukkit.getWorld("world").setDifficulty(Difficulty.PEACEFUL);
     }
 
     public static Main instance;
