@@ -88,27 +88,12 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                 }
                 if (args[0].equalsIgnoreCase("resetPlot") && player.isOp()) {
 
-                    int PlotCount = Main.instance.PlotCount;
-                    //set the line of plots to air | do this when adding plots to the line is added and
-                    player.sendMessage(ChatColor.RED + "This hasn't been implemented yet. If you think this is an error, please contact the developers");
-                    //add the corners of the first level and add the corner of the last level using some math to make this work (remember, its cornerx, cornery, PlotCount * 50)
+                    if(args[1] != null){
 
-                    int z1 = 0;
-                    int z2 = PlotCount * 50;
+                        Main.instance.resetPlot(Integer.parseInt(args[1]));
 
-                    BlockVector3 vector1 = BlockVector3.at(15,63, z1);
-                    BlockVector3 vector2 = BlockVector3.at(-15,199,z2);
-
-                    CuboidRegion cuboidRegion = new CuboidRegion(vector1, vector2);
-
-
-                    try(EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Bukkit.getWorld("world")))){
-                        editSession.setBlocks(cuboidRegion, (Pattern) BlockTypes.AIR);
-                    } catch (WorldEditException e) {
-                        e.printStackTrace();
                     }
 
-                    Main.instance.PlotCount = 0;
 
                 }else if(args[0].equalsIgnoreCase("resetPlot") && !player.isOp()){
 
@@ -117,7 +102,20 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                 }
                 if(args[0].equalsIgnoreCase("play")){
 
-                    player.teleport(new Location(Bukkit.getWorld("world"), 115.5,192,0.5)); //change y to the level of the door
+                    if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) != 1){
+
+                        if(player.getPersistentDataContainer().get(Main.instance.PlayTesting, PersistentDataType.INTEGER) != 1){
+
+                            player.teleport(new Location(Bukkit.getWorld("world"), 115.5,192,0.5)); //change y to the level of the door
+
+                        }else {
+                            player.sendMessage(ChatColor.RED + "You are currently play-testing, please finish before trying to play.");
+                        }
+
+                    }else {
+                        player.sendMessage(ChatColor.RED + "You are currently building, please finish before trying to play.");
+                    }
+
 
                 }
             }
