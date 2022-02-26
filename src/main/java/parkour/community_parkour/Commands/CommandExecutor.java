@@ -53,6 +53,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                             plot_id = i;
                             player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, plot_id);
                             player.sendMessage("[DEBUG] Your Plot Id is: " + plot_id);
+                            Main.instance.loadPlot(plot_id, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
                             break;
                         }
                     }

@@ -51,6 +51,14 @@ public class BuilderListener implements Listener {
 
             }
 
+            if(e.getBlock().getType() == Material.DEEPSLATE){
+
+                e.getPlayer().sendMessage(ChatColor.RED + "You cannot break the walls.");
+                e.setCancelled(true);
+                return;
+
+            }
+
             if(e.getPlayer().getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 0){
 
                 e.setCancelled(true);
@@ -141,6 +149,8 @@ public class BuilderListener implements Listener {
             e.getPlayer().getPersistentDataContainer().set(Main.instance.PlayTesting, PersistentDataType.INTEGER, 0);
 
         }
+
+        Main.instance.resetPlot(e.getPlayer().getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER));
 
     }
 
