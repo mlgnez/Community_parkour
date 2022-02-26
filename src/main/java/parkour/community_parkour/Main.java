@@ -14,17 +14,11 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
-import com.sk89q.worldedit.world.block.BaseBlock;
-import com.sk89q.worldedit.world.block.BlockTypes;
 import org.bukkit.*;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.BlockVector;
 import parkour.community_parkour.Builder_Mode.BuilderInvItem;
 import parkour.community_parkour.Builder_Mode.BuilderListener;
 import parkour.community_parkour.Commands.CommandAutofill;
@@ -33,20 +27,21 @@ import parkour.community_parkour.Items.Boost_Item;
 import parkour.community_parkour.Items.HiddenPlayers_Item;
 import parkour.community_parkour.Items.HidePlayers_Item;
 import parkour.community_parkour.Items.Item_Listener;
+import parkour.community_parkour.PlayerMode.PlayListener;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
+import java.io.*;
+import java.net.URL;
 
 public final class Main extends JavaPlugin {
 
     public NamespacedKey hidden = new NamespacedKey(this, "players_hidden");
     public NamespacedKey PlotID = new NamespacedKey(this, "plot_id");
-    public NamespacedKey Building = new NamespacedKey(this, "building");
+    public NamespacedKey buildingStatus = new NamespacedKey(this, "building");
     public NamespacedKey PlayTesting = new NamespacedKey(this, "playtesting");
-
+    public NamespacedKey lbozo = new NamespacedKey(this, "checkpointID");
+    public NamespacedKey builderCheckPoint = new NamespacedKey(this, "buildercheckpoint");
+    public NamespacedKey level = new NamespacedKey(this, "level");
+    public NamespacedKey checkpoint = new NamespacedKey(this, "checkpoint");
 
     public int PlotCount = 0;
 
@@ -105,7 +100,7 @@ public final class Main extends JavaPlugin {
             e.printStackTrace();
         }
 
-        File file = new File("./schematics/" + player.getUniqueId() + ".schem");
+        File file = new File(this.getFile().getParentFile() +"/communityParkour/" + player.getUniqueId() + ".schem");
         try(ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(file))){
             writer.write(clipboard);
         } catch (IOException exception) {
@@ -116,7 +111,7 @@ public final class Main extends JavaPlugin {
 
     public Clipboard GetPlayerSchematic(Player player){
 
-        File file = new File("./schematics/" + player.getUniqueId() + ".schem");
+        File file = new File(this.getFile().getParentFile() +"/communityParkour/" + player.getUniqueId() + ".schem");
 
         Clipboard clipboard = null;
 
@@ -150,7 +145,7 @@ public final class Main extends JavaPlugin {
         player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 124, (plot_id * 50) - 23.5f));
         player.setAllowFlight(false);
         player.sendMessage(ChatColor.GREEN + "You are now play testing your parkour course.");
-        player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
+        player.getPersistentDataContainer().set(Main.instance.buildingStatus, PersistentDataType.INTEGER, 0);
         player.getPersistentDataContainer().set(Main.instance.PlayTesting, PersistentDataType.INTEGER, 1);
         player.getInventory().setItem(6, new ItemStack(Material.AIR));
 
@@ -171,7 +166,7 @@ public final class Main extends JavaPlugin {
 
         CuboidRegion cuboidRegion = new CuboidRegion(vector1, vector2);
 
-        File file = new File("./schematics/base.schem");
+        File file = new File(this.getFile().getParentFile() +"/communityParkour/base.schem");
 
         Clipboard clipboard = null;
 
@@ -213,10 +208,49 @@ public final class Main extends JavaPlugin {
         }
     }
 
+    public static File getFileFromResources(String path)
+    {
+        ClassLoader classLoader = Main.class.getClassLoader();
+        URL resource = classLoader.getResource(path);
+        if(resource == null)
+        {
+            throw new IllegalArgumentException("file not found! " + path);
+        } else {
+            return new File(resource.getFile());
+        }
+    }
+
     @Override
     public void onEnable() {
+        File file = new File(this.getFile().getParentFile() + "/communityParkour/base.schem");
+        if(!file.exists())
+        {
+            try {
+                if(file.createNewFile())
+                {
+                    File base = getFileFromResources("include/base.schem");
+                    Clipboard clipboard = null;
+                    ClipboardFormat format = ClipboardFormats.findByFile(file);
+                    try(ClipboardReader reader = format.getReader(new FileInputStream(file))){
+                        clipboard = reader.read();
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                    File finalbase = new File(this.getFile().getParentFile() + "/communityParkour/base.schem");
+                    try(ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(file))){
+                        writer.write(clipboard);
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         Bukkit.getPluginManager().registerEvents(new Item_Listener(this), this);
         Bukkit.getPluginManager().registerEvents(new BuilderListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new PlayListener(this), this);
         HidePlayers_Item.init();
         HiddenPlayers_Item.init();
         Boost_Item.init();

@@ -1,37 +1,15 @@
 package parkour.community_parkour.Commands;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extent.Extent;
-import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
-import com.sk89q.worldedit.function.operation.Operation;
-import com.sk89q.worldedit.function.operation.Operations;
-import com.sk89q.worldedit.function.operation.SetLocatedBlocks;
-import com.sk89q.worldedit.function.pattern.Pattern;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.session.SessionManager;
-import com.sk89q.worldedit.world.World;
-import com.sk89q.worldedit.world.block.BaseBlock;
-import com.sk89q.worldedit.world.block.BlockType;
-import com.sk89q.worldedit.world.block.BlockTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.persistence.PersistentDataType;
-import org.checkerframework.checker.units.qual.C;
-import org.graalvm.compiler.core.common.cfg.AbstractBlockBase;
 import parkour.community_parkour.Builder_Mode.BuilderInvItem;
 import parkour.community_parkour.Main;
 
@@ -60,13 +38,13 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                     }
                     player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 124, (plot_id * 50) - 23.5f));
 
-                    if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == null){
+                    if(player.getPersistentDataContainer().get(Main.instance.buildingStatus, PersistentDataType.INTEGER) == null){
 
-                        player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
+                        player.getPersistentDataContainer().set(Main.instance.buildingStatus, PersistentDataType.INTEGER, 0);
 
                     }
 
-                    player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 1);
+                    player.getPersistentDataContainer().set(Main.instance.buildingStatus, PersistentDataType.INTEGER, 1);
                     player.setAllowFlight(true);
                     player.getInventory().setItem(6, BuilderInvItem.supply);
                 }
@@ -103,7 +81,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                 }
                 if(args[0].equalsIgnoreCase("play")){
 
-                    if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) != 1){
+                    if(player.getPersistentDataContainer().get(Main.instance.buildingStatus, PersistentDataType.INTEGER) != 1){
 
                         if(player.getPersistentDataContainer().get(Main.instance.PlayTesting, PersistentDataType.INTEGER) != 1){
 
@@ -132,10 +110,10 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                 }
                 if(args[0].equalsIgnoreCase("pause")){
 
-                    if(player.getPersistentDataContainer().get(Main.instance.Building, PersistentDataType.INTEGER) == 1){
+                    if(player.getPersistentDataContainer().get(Main.instance.buildingStatus, PersistentDataType.INTEGER) == 1){
 
                         Main.instance.SavePlot(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER), player);
-                        player.getPersistentDataContainer().set(Main.instance.Building, PersistentDataType.INTEGER, 0);
+                        player.getPersistentDataContainer().set(Main.instance.buildingStatus, PersistentDataType.INTEGER, 0);
                         player.teleport(new Location(Bukkit.getWorld("world"), 115.5,192,50.5)); //change y to the level of the door
 
                     }else{
