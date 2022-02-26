@@ -168,7 +168,6 @@ public final class Main extends JavaPlugin {
 
         BlockVector3 vector1 = BlockVector3.at(15,63, z1);
         BlockVector3 vector2 = BlockVector3.at(-15,199,z2);
-        BlockVector3 vector3 = BlockVector3.at(0,300,0);
 
         CuboidRegion cuboidRegion = new CuboidRegion(vector1, vector2);
 
@@ -188,7 +187,7 @@ public final class Main extends JavaPlugin {
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
             Operation operation = new ClipboardHolder(clipboard)
                     .createPaste(editSession)
-                    .to(BlockVector3.at(0, 124, plot_id * 50)) //we paste the plot in the line which is 100 blocks away from the building area.
+                    .to(BlockVector3.at(-15, 63, (plot_id * 50) -24))
                     // configure here
                     .build();
             Operations.complete(operation);

@@ -170,12 +170,14 @@ public class BuilderListener implements Listener {
 
         Player player = e.getPlayer();
 
-        if(player.getPersistentDataContainer().get(Main.instance.PlayTesting, PersistentDataType.INTEGER) == 1){
+        if(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.DEEPSLATE){
 
-            if(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.DEEPSLATE){
+            if(player.getPersistentDataContainer().get(Main.instance.PlayTesting, PersistentDataType.INTEGER) == 1){
 
                 Main.instance.PastePlot(Main.instance.PlotCount, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
                 player.getPersistentDataContainer().set(Main.instance.PlayTesting, PersistentDataType.INTEGER, 0);
+                Main.instance.resetPlot(player.getPersistentDataContainer().get(Main.instance.PlotID, PersistentDataType.INTEGER));
+                player.teleport(new Location(Bukkit.getWorld("world"), 115.5,192,0.5)); //change y to the level of the door
 
             }
         }

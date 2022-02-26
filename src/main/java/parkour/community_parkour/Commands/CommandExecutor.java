@@ -118,6 +118,17 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
 
 
                 }
+                if(args[0].equalsIgnoreCase("plotCount")){
+
+                    if(player.isOp()){
+
+                        player.sendMessage(ChatColor.GOLD + "Plot Count is: " + Main.instance.PlotCount);
+
+                    }else {
+                        player.sendMessage(ChatColor.RED + "Error | Player is either not admin or this has broken");
+                    }
+
+                }
             }
         }
         return false;
