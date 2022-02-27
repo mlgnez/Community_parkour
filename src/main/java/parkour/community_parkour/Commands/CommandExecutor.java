@@ -25,34 +25,43 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
             {
                 if(args[0].equalsIgnoreCase("edit"))
                 {
-                    int plot_id = -50;
-                    for(int i = 0; i < Main.instance.plotAvaliability.length; i++ )
-                    {
-                        if(!Main.instance.plotAvaliability[i])
+                    if(!(player.getPersistentDataContainer().get(Main.instance.buildingStatus, PersistentDataType.INTEGER) == 1)){
+
+                        int plot_id = -50;
+                        for(int i = 0; i < Main.instance.plotAvaliability.length; i++ )
                         {
-                            plot_id = i;
-                            Main.instance.plotAvaliability[i] = true;
-                            player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, plot_id);
-                            player.sendMessage("[DEBUG] Your Plot Id is: " + plot_id);
-                            try {
-                                Main.instance.loadPlot(plot_id, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            if(!Main.instance.plotAvaliability[i])
+                            {
+                                plot_id = i;
+                                Main.instance.plotAvaliability[i] = true;
+                                player.getPersistentDataContainer().set(Main.instance.PlotID, PersistentDataType.INTEGER, plot_id);
+                                player.sendMessage("[DEBUG] Your Plot Id is: " + plot_id);
+                                try {
+                                    Main.instance.loadPlot(plot_id, Main.instance.GetPlayerSchematic(player), BukkitAdapter.adapt(Bukkit.getWorld("world")));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
                             }
-                            break;
                         }
+                        player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 124, (plot_id * 50) - 23.5f));
+
+                        if(player.getPersistentDataContainer().get(Main.instance.buildingStatus, PersistentDataType.INTEGER) == null){
+
+                            player.getPersistentDataContainer().set(Main.instance.buildingStatus, PersistentDataType.INTEGER, 0);
+
+                        }
+
+                        player.getPersistentDataContainer().set(Main.instance.buildingStatus, PersistentDataType.INTEGER, 1);
+                        player.setAllowFlight(true);
+                        player.getInventory().setItem(6, BuilderInvItem.supply);
+
+                    }else{
+
+                        player.sendMessage(ChatColor.RED + "You are currently building, you cannot edit twice at a time.");
+
                     }
-                    player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 124, (plot_id * 50) - 23.5f));
 
-                    if(player.getPersistentDataContainer().get(Main.instance.buildingStatus, PersistentDataType.INTEGER) == null){
-
-                        player.getPersistentDataContainer().set(Main.instance.buildingStatus, PersistentDataType.INTEGER, 0);
-
-                    }
-
-                    player.getPersistentDataContainer().set(Main.instance.buildingStatus, PersistentDataType.INTEGER, 1);
-                    player.setAllowFlight(true);
-                    player.getInventory().setItem(6, BuilderInvItem.supply);
                 }
                 if(args[0].equalsIgnoreCase("publish"))
                 {

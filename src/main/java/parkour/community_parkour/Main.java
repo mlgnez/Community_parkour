@@ -111,7 +111,7 @@ public final class Main extends JavaPlugin {
 
     public Clipboard GetPlayerSchematic(Player player) throws IOException {
 
-        File file = new File(this.getFile().getParentFile() +"/communityParkour/" + player.getUniqueId() + ".schem");
+        File file = new File(this.getFile().getParentFile() + "/communityParkour/" + player.getUniqueId() + ".schem");
         Clipboard clipboard = null;
 
         if(!file.exists()){
@@ -248,25 +248,22 @@ public final class Main extends JavaPlugin {
         if(!file.exists())
         {
             try {
-                if(file.createNewFile())
-                {
-                    File base = getFileFromResources("include/base.schem");
-                    Clipboard clipboard = null;
-                    ClipboardFormat format = ClipboardFormats.findByFile(file);
-                    try(ClipboardReader reader = format.getReader(new FileInputStream(file))){
-                        clipboard = reader.read();
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
-                    File finalbase = new File(this.getFile().getParentFile() + "/communityParkour/base.schem");
-                    try(ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(file))){
-                        writer.write(clipboard);
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
+                File base = getFileFromResources("include/base.schem");
+                Clipboard clipboard = null;
+                ClipboardFormat format = ClipboardFormats.findByFile(file);
+                try(ClipboardReader reader = format.getReader(new FileInputStream(base))){
+                    clipboard = reader.read();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+                File finalbase = new File(this.getFile().getParentFile() + "/communityParkour/base.schem");
+                try(ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(finalbase))){
+                    writer.write(clipboard);
+                } catch (IOException exception) {
+                    exception.printStackTrace();
                 }
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
