@@ -185,4 +185,19 @@ public class BuilderListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onOpen(PlayerInteractEvent e){
+
+        if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
+
+            if(e.getClickedBlock().getType() == Material.DISPENSER){
+
+                e.setCancelled(true);
+
+            }
+
+        }
+
+    }
+
 }
